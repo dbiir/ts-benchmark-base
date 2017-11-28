@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cn.edu.ruc</groupId>
+    <artifactId>root</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>cn.edu.ruc</groupId>
+  <artifactId>bm-cassandra</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>bm-cassandra</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>cn.edu.ruc</groupId>
+      <artifactId>bm-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core -->
+	<dependency>
+	    <groupId>com.datastax.cassandra</groupId>
+	    <artifactId>cassandra-driver-core</artifactId>
+	    <version>${cassandra.driver.version}</version>
+	</dependency>
+	    
+  </dependencies>
+</project>

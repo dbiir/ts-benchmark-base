@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>cn.edu.ruc</groupId>
+    <artifactId>root</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>cn.edu.ruc</groupId>
+  <artifactId>bm-tsfile</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>bm-tsfile</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>cn.edu.ruc</groupId>
+      <artifactId>bm-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <!-- 需要先git tsfile,然后git tsfiledb 都install就可以了 -->
+<!--     <dependency> -->
+<!-- 	    <groupId>cn.edu.thu</groupId> -->
+<!-- 		<artifactId>tsfiledb</artifactId> -->
+<!-- 		<version>0.0.1</version> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 	    <groupId>cn.edu.thu</groupId> -->
+<!-- 		<artifactId>tsfiledb-jdbc</artifactId> -->
+<!-- 		<version>0.0.1-SNAPSHOT</version> -->
+<!-- 	</dependency> -->
+    <dependency>
+      <groupId>cn.edu.tsinghua</groupId>
+      <artifactId>iotdb-jdbc</artifactId>
+      <version>0.1.2</version>
+    </dependency>
+	<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>druid</artifactId>
+	    <version>1.1.0</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+	<dependency>
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	    <version>5.1.43</version>
+	</dependency>
+		
+		
+  </dependencies>
+</project>
