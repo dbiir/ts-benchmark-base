@@ -10,6 +10,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -19,6 +26,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.influxdb.InfluxDBFactory;
 
 import cn.edu.ruc.biz.Core;
 
@@ -36,6 +44,8 @@ public class InfluxDB extends DBBase {
 	private String DB_NAME = "influxdb";
 	private String WRITE_URL = "/write?precision=ms&db=";
 	private String QUERY_URL = "/query?db=";
+	private org.influxdb.InfluxDB INFLUXDB = null;
+	MediaType MEDIA_TYPE_TEXT = MediaType.parse("text/plain");
 	public static void main(String[] args) throws Exception {
 		Core.main(args);
 	}
@@ -54,7 +64,8 @@ public class InfluxDB extends DBBase {
 		WRITE_URL = URL + WRITE_URL + DB_NAME;
 		QUERY_URL = URL + QUERY_URL + DB_NAME;
 		createTestDB();
-
+		INFLUXDB=InfluxDBFactory.connect(URL);
+		INFLUXDB.setDatabase(DB_NAME);
 	}
 
 	@Override
@@ -169,8 +180,17 @@ public class InfluxDB extends DBBase {
 				sc.append("\n");
 			}
 		}
-		return insertByHttpClient(sc.toString());
+//		return insertByHttpClient(sc.toString());
+		return insertByOkHttp(sc.toString());
 	}
+	private Status insertByOkHttp(String points) {
+	    Request request = new Request.Builder()
+	            .url(WRITE_URL)
+	            .post(RequestBody.create(MEDIA_TYPE_TEXT, points))
+	            .build();
+		return exeOkHttpRequest(request);
+	}
+
 	//FIXME insert influxdb会主动关闭连接，而query不会
 	private Status insertByHttpClient(String data) {
 		HttpClient hc = getHttpClient();
@@ -442,30 +462,38 @@ public class InfluxDB extends DBBase {
 
 	@Override
 	public Status selectHourAvgByDevice(TsPoint point, Date startTime, Date endTime) {
-		HttpClient hc = getHttpClient();
-		HttpPost post = new HttpPost(QUERY_URL);
-		HttpResponse response = null;
-		long costTime = 0L;
-		try {
-			List<NameValuePair> nameValues = new ArrayList<NameValuePair>();
-			String selectSql = "SELECT MEAN(value) FROM sensor where device_code='" + point.getDeviceCode()
-					+ "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime()) + " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime()) + " group by time(1h)";
-			NameValuePair nameValue = new BasicNameValuePair("q", selectSql);
-			nameValues.add(nameValue);
-			HttpEntity entity = new UrlEncodedFormEntity(nameValues, "utf-8");
-			post.setEntity(entity);
-			long startTime1 = System.nanoTime();
-			response = hc.execute(post);
-			long endTime1 = System.nanoTime();
-			costTime = endTime1 - startTime1;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Status.FAILED(-1);
-		}finally{
-			closeResponse(response);
-			closeHttpClient(hc);
-		}
-		return Status.OK(costTime);
+//		HttpClient hc = getHttpClient();
+//		HttpPost post = new HttpPost(QUERY_URL);
+//		HttpResponse response = null;
+//		long costTime = 0L;
+//		try {
+//			List<NameValuePair> nameValues = new ArrayList<NameValuePair>();
+//			String selectSql = "SELECT MEAN(value) FROM sensor where device_code='" + point.getDeviceCode()
+//					+ "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime()) + " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime()) + " group by time(1h)";
+//			NameValuePair nameValue = new BasicNameValuePair("q", selectSql);
+//			nameValues.add(nameValue);
+//			HttpEntity entity = new UrlEncodedFormEntity(nameValues, "utf-8");
+//			post.setEntity(entity);
+//			long startTime1 = System.nanoTime();
+//			response = hc.execute(post);
+//			long endTime1 = System.nanoTime();
+//			costTime = endTime1 - startTime1;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Status.FAILED(-1);
+//		}finally{
+//			closeResponse(response);
+//			closeHttpClient(hc);
+//		}
+//		return Status.OK(costTime);
+		String selectSql = "SELECT MEAN(value) FROM sensor where device_code='" + point.getDeviceCode()
+				+ "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime()) + " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime()) + " group by time(1h)";
+		FormBody body=new FormBody.Builder().add("q", selectSql).build();
+	    Request request = new Request.Builder()
+        .url(QUERY_URL)
+        .post(body)
+        .build();
+		return exeOkHttpRequest(request);
 	}
 
 	@Override
@@ -583,58 +611,74 @@ public class InfluxDB extends DBBase {
 
 	@Override
 	public Status deletePoints(Date date) {
-		HttpClient hc = getHttpClient();
-		HttpPost post = new HttpPost(QUERY_URL);
-		HttpResponse response = null;
-		long costTime = 0L;
-		try {
-			List<NameValuePair> nameValues = new ArrayList<NameValuePair>();
-			String deleteSql = "DELETE  FROM sensor where time<" + date.getTime();
-			NameValuePair nameValue = new BasicNameValuePair("q", deleteSql);
-			nameValues.add(nameValue);
-			HttpEntity entity = new UrlEncodedFormEntity(nameValues, "utf-8");
-			post.setEntity(entity);
-			long startTime1 = System.nanoTime();
-			response = hc.execute(post);
-			long endTime1 = System.nanoTime();
-			costTime = endTime1 - startTime1;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Status.FAILED(-1);
-		}finally{
-			closeResponse(response);
-			closeHttpClient(hc);
-		}
-		//System.out.println("此次删除消耗时间[" + costTime / 1000 + "]s");
-		return Status.OK(costTime);
+//		HttpClient hc = getHttpClient();
+//		HttpPost post = new HttpPost(QUERY_URL);
+//		HttpResponse response = null;
+//		long costTime = 0L;
+//		try {
+//			List<NameValuePair> nameValues = new ArrayList<NameValuePair>();
+//			String deleteSql = "DELETE  FROM sensor where time<" + date.getTime();
+//			NameValuePair nameValue = new BasicNameValuePair("q", deleteSql);
+//			nameValues.add(nameValue);
+//			HttpEntity entity = new UrlEncodedFormEntity(nameValues, "utf-8");
+//			post.setEntity(entity);
+//			long startTime1 = System.nanoTime();
+//			response = hc.execute(post);
+//			long endTime1 = System.nanoTime();
+//			costTime = endTime1 - startTime1;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Status.FAILED(-1);
+//		}finally{
+//			closeResponse(response);
+//			closeHttpClient(hc);
+//		}
+//		return Status.OK(costTime);
+		String deleteSql = "DELETE  FROM sensor where time<" +TimeUnit.MILLISECONDS.toNanos(date.getTime());
+//		System.out.println(deleteSql);
+		FormBody body=new FormBody.Builder().add("q", deleteSql).build();
+	    Request request = new Request.Builder()
+        .url(QUERY_URL)
+        .post(body)
+        .build();
+		return exeOkHttpRequest(request);
 	}
 
 	@Override
 	public Status selectByDeviceAndSensor(TsPoint point, Date startTime, Date endTime) {
-		HttpClient hc = getHttpClient();
-		HttpPost post = new HttpPost(QUERY_URL);
-		HttpResponse response = null;
-		long costTime = 0L;
-		try {
-			List<NameValuePair> nameValues = new ArrayList<NameValuePair>();
-			String selectSql = "SELECT * FROM sensor where device_code='" + point.getDeviceCode()
-					+ "' and sensor_code='" + point.getSensorCode() + "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime())
-					+ " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime());
-			NameValuePair nameValue = new BasicNameValuePair("q", selectSql);
-			nameValues.add(nameValue);
-			HttpEntity entity = new UrlEncodedFormEntity(nameValues, "utf-8");
-			post.setEntity(entity);
-			long startTime1 = System.nanoTime();
-			response = hc.execute(post);
-			long endTime1 = System.nanoTime();
-			costTime = endTime1 - startTime1;
-		} catch (Exception e) {
-			return Status.FAILED(-1);
-		}finally{
-			closeResponse(response);
-			closeHttpClient(hc);
-		}
-		return Status.OK(costTime);
+//		HttpClient hc = getHttpClient();
+//		HttpPost post = new HttpPost(QUERY_URL);
+//		HttpResponse response = null;
+//		long costTime = 0L;
+//		try {
+//			List<NameValuePair> nameValues = new ArrayList<NameValuePair>();
+//			String selectSql = "SELECT * FROM sensor where device_code='" + point.getDeviceCode()
+//					+ "' and sensor_code='" + point.getSensorCode() + "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime())
+//					+ " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime());
+//			NameValuePair nameValue = new BasicNameValuePair("q", selectSql);
+//			nameValues.add(nameValue);
+//			HttpEntity entity = new UrlEncodedFormEntity(nameValues, "utf-8");
+//			post.setEntity(entity);
+//			long startTime1 = System.nanoTime();
+//			response = hc.execute(post);
+//			long endTime1 = System.nanoTime();
+//			costTime = endTime1 - startTime1;
+//		} catch (Exception e) {
+//			return Status.FAILED(-1);
+//		}finally{
+//			closeResponse(response);
+//			closeHttpClient(hc);
+//		}
+//		return Status.OK(costTime);
+		String selectSql = "SELECT * FROM sensor where device_code='" + point.getDeviceCode()
+				+ "' and sensor_code='" + point.getSensorCode() + "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime())
+				+ " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime());
+		FormBody body=new FormBody.Builder().add("q", selectSql).build();
+	    Request request = new Request.Builder()
+        .url(QUERY_URL)
+        .post(body)
+        .build();
+		return exeOkHttpRequest(request);
 	}
 
 	@Override
@@ -668,7 +712,7 @@ public class InfluxDB extends DBBase {
 
 	@Override
 	public Status selectMaxByDeviceAndSensor(String deviceCode, String sensorCode, Date startTime, Date endTime) {
-		HttpClient hc = getHttpClient();
+		/*HttpClient hc = getHttpClient();
 		HttpPost post = new HttpPost(QUERY_URL);
 		HttpResponse response = null;
 		long costTime = 0L;
@@ -692,6 +736,34 @@ public class InfluxDB extends DBBase {
 		}finally{
 			closeResponse(response);
 			closeHttpClient(hc);
+		}
+		return Status.OK(costTime);*/
+		String selectSql = "SELECT MAX(value) FROM sensor where device_code='" + deviceCode + "' and sensor_code='"
+				+ sensorCode + "' and time>=" + TimeUnit.MILLISECONDS.toNanos(startTime.getTime()) + " and time<=" + TimeUnit.MILLISECONDS.toNanos(endTime.getTime());
+		FormBody body=new FormBody.Builder().add("q", selectSql).build();
+	    Request request = new Request.Builder()
+        .url(QUERY_URL)
+        .post(body)
+//        .header("Connection", "close")
+        .build();
+		
+		return exeOkHttpRequest(request);
+	}
+
+	private Status exeOkHttpRequest(Request request) {
+		long costTime = 0L;
+	    Response response;
+	    OkHttpClient client = HttpPoolManager.getOkHttpClient();
+		try {
+			long startTime1=System.nanoTime();
+			response = client.newCall(request).execute();
+			int code = response.code();
+			response.close();
+			long endTime1=System.nanoTime();
+			costTime=endTime1-startTime1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Status.FAILED(0L);
 		}
 		return Status.OK(costTime);
 	}

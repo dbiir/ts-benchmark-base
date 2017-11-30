@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
+
+import okhttp3.OkHttpClient;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -71,6 +74,14 @@ public class HttpPoolManager {
     	}
     	return httpClient;
     }
+	private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient().newBuilder()
+		       .readTimeout(500000, TimeUnit.MILLISECONDS)
+		       .connectTimeout(500000, TimeUnit.MILLISECONDS)
+		       .writeTimeout(500000, TimeUnit.MILLISECONDS)
+		       .build();
+	public static OkHttpClient getOkHttpClient(){
+		return OK_HTTP_CLIENT;
+	}
     private static int count;
     public static void main(String[] args) throws InterruptedException {
     	ExecutorService pool = Executors.newFixedThreadPool(300);

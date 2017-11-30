@@ -1274,6 +1274,7 @@ public class Core {
 			//查一天的数据的最大值
 			TimeSlot timeSlot = TSUtils.getRandomTimeBetween(Constants.HISTORY_START_TIME, Constants.HISTORY_END_TIME,TimeUnit.SECONDS.toMillis(3600*24));
 			status = dbBase.selectMaxByDeviceAndSensor(deviceCode, sensorCode, new Date(timeSlot.getStartTime()), new Date(timeSlot.getEndTime()));
+//			status = dbBase.selectHourAvgByDevice(point, new Date(timeSlot.getStartTime()), new Date(timeSlot.getEndTime()));
 		}
 		return status;
 	}

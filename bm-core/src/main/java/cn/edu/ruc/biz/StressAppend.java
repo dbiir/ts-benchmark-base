@@ -55,13 +55,14 @@ public class StressAppend {
 		int seq=1;
 		long start=System.currentTimeMillis();
 		while(seq*THREAD_NUMBER<10000){
+			DBBase dbBase= Constants.getDBBase();
+//			dbBase.deletePoints(new Date());//删除已有数据
 			long start1=System.currentTimeMillis();
 			//生成数据
 //			Map<Integer,List<List<TsPoint>>> dataMap= generate7MinData(seq,THREAD_NUMBER);
 			final Map<Integer,TsPoint[][]> dataMap= generate7MinData(seq,THREAD_NUMBER);//用数组存储效率虽然占用内存多一些，但是运行效率高些，空间换时间
 			long end1=System.currentTimeMillis();
 			System.out.println("device number="+seq*THREAD_NUMBER+",generate data costTime:["+(end1-start1)+" ms]");
-			DBBase dbBase= Constants.getDBBase();
 			int startTime=0;
 //			int sumThreadPoints=0;
 			long avgPointsRatio=0;
