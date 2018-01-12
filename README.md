@@ -27,8 +27,9 @@ ts-benchmark是用来测试时序数据库读写性能的测试工具
 
 
 ```
-git clone https://git.oschina.net/zdyfjh2017/ts-benchmark.git
-linux   
+git clone https://github.com/dbiir/ts-benchmark.git
+linux  
+mvn clean package -Dmaven.test.skip=true 
 cd build
 #批量导入数据
 ./starup.sh import tsfile  -dn 2 -sn 10 -ps 7000 -lcp 50000 -p tsfile.url=jdbc:tsfile://127.0.0.1:6667/  
