@@ -22,7 +22,9 @@
    		<sqlite.jdbc.version>3.19.3</sqlite.jdbc.version>
    		<dbutil.version>1.6</dbutil.version>
    		<jfreechart.version>1.0.19</jfreechart.version>
-   		
+   		<log4j.version>2.10.0</log4j.version>
+   		<slf4j.version>1.7.25</slf4j.version>
+   		<logback.version>1.2.3</logback.version>
    </properties>
    <dependencies>
 	    <dependency>
