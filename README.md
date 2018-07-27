@@ -1,70 +1,51 @@
-# ts-benchmark
+# tsbm
+ts benchmark 
 
-时间序列数据库基准测试工具  
-ts-benchmark是用来测试时序数据库读写性能的测试工具
+# Prerequisites
+1. Java >= 1.8
+2. Maven >= 3.0 (If you want to compile and install IoTDB from source code)
+3. TsFile >= 0.6.0 (TsFile Github page: [https://github.com/thulab/tsfile](https://github.com/thulab/tsfile))
+4. IoTDB-JDBC >= 0.6.0 (IoTDB-JDBC Github page: [https://github.com/thulab/iotdb-jdbc](https://github.com/thulab/iotdb-jdbc))
 
-### 目前支持功能
+# Quick Start
+## Build
+tsbm不需要手动编译，运行脚本会自动编译 
+## Configure 
+```vim conf/db.properties``` 
+修改 
+```DB_TYPE=iotdb``` 
 
+```DB_IP=测试服务器IP``` 
 
+```DB_PORT=端口号```  
 
-1. 批量导入历史数据
-1. 混合负载的吞吐量，响应时间
-1. 压力测试-多用户加压测试
-1. 压力测试-多设备加压测试
+```DB_USER=用户名``` 
 
+```DB_PASSWD=用户密码``` 
+### Start import
+进行别的负载测试，必须先做该步骤 
 
-### Runtime Requirements
-- A Linux system 
-- Java Runtime Environment 1.8
-- MAVEN 
-- GIT1.7.10 or later 
-- 当测试对象为IotDB，需要安装IotDB的JDBC
-- iotJDBC安装如 https://github.com/thulab/iotdb-jdbc
+```./import.sh```
 
-### Getting Started Simply
+可以通过console查看导入过程 
 
+### Start write_test
+```./write_test.sh``` 
 
+测试结束后，可在 result/result.json中查看测试结果 
+### Start read_test
+```./read_test.sh``` 
 
+测试结束后，可在result/result.json中查看测试结果
+### Start write_test_mix.sh
+```./write_test_mix.sh``` 
 
-```
-git clone https://github.com/dbiir/ts-benchmark.git
-linux  
-mvn clean package -Dmaven.test.skip=true 
-cd build
-#批量导入数据
-./starup.sh import tsfile  -dn 2 -sn 10 -ps 7000 -lcp 50000 -p tsfile.url=jdbc:tsfile://127.0.0.1:6667/  
-windows   
-mvn clean package -Dmaven.test.skip=true   
-starup.bat  import tsfile  -dn 2 -sn 10 -ps 7000 -lcp 50000 -p tsfile.url=jdbc:tsfile://127.0.0.1:6667/   
- ```   
-``` ./starup.sh perform tsfile -modules throughput -p  tsfile.url=jdbc:tsfile://127.0.0.1:6667/ #混合负载的吞吐量，响应时间，一共发送1000000个请求，每秒最多发送 1000000个，客户端数为1000个```   
+测试过程中 可通过log/write_test_mix_时间.log 查看日志 
 
-```
-#压力测试-多用户加压测试
-./starup.sh perform tsfile -modules stress_unappend -p  tsfile.url=jdbc:tsfile://127.0.0.1:6667/
+测试结束后，可在result/result.json中查看测试结果 
+### Start read_test_mix.sh
+```./read_test_mix.sh``` 
 
-```
-```
-#压力测试-多设备加压测试
-./starup.sh sap tsfile -p  tsfile.url=jdbc:tsfile://127.0.0.1:6667/
+测试过程中 可通过log/read_test_mix_时间.log 查看日志 
 
-```
-
-
-### 参数描述   
-
-
-- 第一个参数，程序运行```import``` 数据导入,```perform``` 性能测试,```sap```  多设备加压测试
-- 第二个参数，目标测试数据库 目前支持四个参数 ```tsfile```,```opentsdb```,```cassandra```,```influxdb```   
-- 其余参数
-  
-目标数据库参数```-p key=value```  
- tsfile:   
-``` -p  tsfile.url=jdbc:tsfile://127.0.0.1:6667/```  tsfiledb的jdbc url   
-influxdb:   
- ```-p influxdb.url=http://127.0.0.1::8086  ``` influxdb数据库url  
-  ```-p influxdb.database=ruc_test1 ```  influxdb测试数据库database名称    
-opentsdb:    
-  ```-p OpenTSDB.url=http://127.0.0.1::4242/  ``` opentsdb数据库url   
-cassandra:   
- ```-p Cassandra.url=127.0.0.1 ```    cassandra数据库url
+测试结束后，可在result/result.json中查看测试结果 

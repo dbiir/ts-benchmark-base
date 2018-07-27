@@ -1,19 +1,28 @@
-*.class
+# Eclipse IDE files
+**/.classpath
+**/.project
+**/.settings/
+# src/main/resources/
+# intellij IDE files
+**/*.iml
+**/.idea/
+**/*.log
+# Apple OS X related
+**/.DS_Store
 
-# Package Files #
-*.jar
-*.war
-*.ear
-maven-archiver
-surefire-reports
-default-testCompile
-default-compile
-.settings
-*.classpath
-/bin/
+# build generated
+**/target/
+**/build/
 
-/data/
-*.png
-*.log
-data
-*.db
+# intermediately generated locally
+**/logs/
+
+result/result.json
+#*.jar
+*.gz
+*.tar.gz
+*.tar
+/lib
+
+/target/
+/perform.db
