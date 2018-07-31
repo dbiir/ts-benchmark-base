@@ -31,9 +31,9 @@ public class OpentsdbAdapter implements DBAdapter {
 	private static String SENSOR_TAG="s";
 	MediaType MEDIA_TYPE_TEXT = MediaType.parse("text/plain");
 	private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient().newBuilder()
-		       .readTimeout(500000, TimeUnit.MILLISECONDS)
-		       .connectTimeout(500000, TimeUnit.MILLISECONDS)
-		       .writeTimeout(500000, TimeUnit.MILLISECONDS)
+		       .readTimeout(60, TimeUnit.MINUTES)
+		       .connectTimeout(60, TimeUnit.MINUTES)
+		       .writeTimeout(60, TimeUnit.MINUTES)
 		       .build();
 	public static OkHttpClient getOkHttpClient(){
 		return OK_HTTP_CLIENT;
