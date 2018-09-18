@@ -38,12 +38,17 @@ import cn.edu.ruc.utils.TimeSlot;
 public class CoreBiz {
 	private String devicePre="d_";
 	private String sensorPre="s_";
+	public LinkedList<long[]> writeLogs=new LinkedList<long[]>();
 	private TsParamConfig tsParamConfig;
 	private DBAdapter dbAdapter;
 	private Random random=new Random	();
 	private Map<String,FunctionParam> sensorFunctionMap=new HashMap<String,FunctionParam>();
 	private Map<String,Long> shiftTimeMap=new HashMap<String,Long>();
 	private static final Logger LOGGER=LoggerFactory.getLogger(CoreBiz.class);
+	public void test() {
+		LinkedList<TsWrite> pkgs = generatePkg(1L);
+		System.out.println(pkgs.size());
+	}
 	/**
 	 * 插入数据
 	 * @throws ExecutionException 
@@ -119,6 +124,16 @@ public class CoreBiz {
 
 			}
 			ppsList.add(pps);
+			long[] writeLog=new long[8];
+			writeLog[0]=(currentTime-tsParamConfig.getStartTime())/(tsParamConfig.getStep()*tsParamConfig.getCacheTimes());
+			writeLog[1]=(tsParamConfig.getEndTime()-tsParamConfig.getStartTime())/(tsParamConfig.getStep()*tsParamConfig.getCacheTimes());
+			writeLog[2]=sumNum;
+			writeLog[3]=sumPoints;
+			writeLog[4]=pps;
+			writeLog[5]=bizStartTime;
+			writeLog[5]=bizEndTime;
+			writeLog[7]=1;
+			writeLogs.addLast(writeLog);
 //			currentTime+=tsParamConfig.getStep()*tsParamConfig.getCacheTimes();
 			long costTime = System.currentTimeMillis()-bizStartTime;
 			if(costTime<tsParamConfig.getWritePulse()) {//每隔writePulse ms进行一批发送

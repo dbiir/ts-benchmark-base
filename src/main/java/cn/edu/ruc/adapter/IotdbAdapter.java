@@ -85,21 +85,6 @@ public class IotdbAdapter implements DBAdapter {
 			    }
 			} catch (Exception e) {
 				e.printStackTrace();			}
-//		    for(int deviceIdx=0;deviceIdx<deviceNum;deviceIdx++) {
-//		    		try {
-//			    			String deviceCode="d_"+deviceIdx;
-//			    			for(int sensorIdx=0;sensorIdx<sensorNum;sensorIdx++) {
-//			    				String sensorCode="s_"+sensorIdx;
-//			    				String sql="CREATE TIMESERIES "+ROOT_SERIES_NAME+"."+deviceCode+"."+sensorCode+"  WITH DATATYPE=FLOAT, ENCODING=RLE";
-//			    				statement.addBatch(sql);
-//			    			}
-//			    			statement.executeBatch();
-//			    			statement.clearBatch();
-//			    			logger.info("{} create timeseries finished[{}/{}].",deviceCode,deviceIdx+1,deviceNum);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//		    }
 		  } catch (Exception e) {
 			  e.printStackTrace();
 		  } finally {
