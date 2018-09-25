@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OpentsdbAdapter implements DBAdapter {
-	private static String URL="http://%s:%s";
+	private  String URL="http://%s:%s";
 	private static String PUT_URL="/api/put";
 	private static String QUERY_URL="/api/query";
 	private static  String METRIC="wind.perform";//time.series.perform

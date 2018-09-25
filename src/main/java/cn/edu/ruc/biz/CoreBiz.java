@@ -399,6 +399,7 @@ public class CoreBiz {
 		dbAdapter.initDataSource(tds,tsParamConfig);
 		initShiftTime();
 		initSensorFunction();
+		System.out.println(this.dbAdapter.hashCode());
 	}
 	private void initShiftTime() {
 		int dn=tsParamConfig.getDeviceNum();

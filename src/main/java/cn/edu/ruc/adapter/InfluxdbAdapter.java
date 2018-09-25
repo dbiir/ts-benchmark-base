@@ -26,11 +26,11 @@ import okhttp3.Response;
  *
  */
 public class InfluxdbAdapter implements DBAdapter {
-	private static String URL = "http://%s:%s";
-	private static String DB_NAME = "ruc_test_5";
-	private static String WRITE_URL = "/write?precision=ms&db=%s";
-	private static String QUERY_URL = "/query?db=%s";
-	private static org.influxdb.InfluxDB INFLUXDB = null;
+	private String URL = "http://%s:%s";
+	private String DB_NAME = "ruc_test_5";
+	private String WRITE_URL = "/write?precision=ms&db=%s";
+	private String QUERY_URL = "/query?db=%s";
+	private org.influxdb.InfluxDB INFLUXDB = null;
 	MediaType MEDIA_TYPE_TEXT = MediaType.parse("text/plain");
 	@Override
 	public void initDataSource(TsDataSource ds,TsParamConfig tspc) {

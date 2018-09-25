@@ -26,10 +26,10 @@ import cn.edu.ruc.base.TsWrite;
  *
  */
 public class IotdbAdapter implements DBAdapter {
-	private static String DRIVER_CLASS ="cn.edu.tsinghua.iotdb.jdbc.TsfileDriver";
-	private static String URL ="jdbc:tsfile://%s:%s/";
-	private static String USER ="";
-	private static String PASSWD ="";
+	private  String DRIVER_CLASS ="cn.edu.tsinghua.iotdb.jdbc.TsfileDriver";
+	private  String URL ="jdbc:tsfile://%s:%s/";
+	private  String USER ="";
+	private  String PASSWD ="";
 	private static final String ROOT_SERIES_NAME="root.perform";
 	private Logger logger=LoggerFactory.getLogger(getClass());
 	private TsParamConfig tspc=null;
