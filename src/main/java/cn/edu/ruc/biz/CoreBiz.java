@@ -134,6 +134,7 @@ public class CoreBiz {
 			writeLog[5]=bizEndTime;
 			writeLog[7]=1;
 			writeLogs.addLast(writeLog);
+			System.out.println(writeLogs.size()+"======");
 //			currentTime+=tsParamConfig.getStep()*tsParamConfig.getCacheTimes();
 			long costTime = System.currentTimeMillis()-bizStartTime;
 			if(costTime<tsParamConfig.getWritePulse()) {//每隔writePulse ms进行一批发送
