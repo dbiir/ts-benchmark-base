@@ -215,7 +215,7 @@ public class InfluxdbAdapter implements DBAdapter {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(query);
+//			System.out.println(query);
 			return Status.FAILED(0L);
 		}
 	}
