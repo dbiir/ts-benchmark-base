@@ -44,7 +44,7 @@ public class CTsdbAdapter implements DBAdapter {
     private static final String pwd = "Root_1230!";
     private static final String TIME_FORMAT = "epoch_millis";
 //    private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
+//    private SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
     MediaType MEDIA_TYPE_TEXT = MediaType.parse("text/plain");
 	private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient().newBuilder()
 		       .readTimeout(60, TimeUnit.MINUTES)
