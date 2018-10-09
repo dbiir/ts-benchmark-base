@@ -219,6 +219,7 @@ public class CTsdbAdapter implements DBAdapter {
 			long startTime1=System.nanoTime();
 			response = client.newCall(request).execute();
 			int code = response.code();
+			System.out.println(response.body().toString());
 			response.close();
 			long endTime1=System.nanoTime();
 			costTime=endTime1-startTime1;
