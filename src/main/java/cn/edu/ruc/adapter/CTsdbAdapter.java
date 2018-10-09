@@ -90,6 +90,7 @@ public class CTsdbAdapter implements DBAdapter {
         ctsdbMetricModel.setFields(fields);
         String body = JSON.toJSONString(ctsdbMetricModel);
     	    Request request = new Request.Builder()
+    	    		.header("Authorization", Credentials.basic(user, pwd))
     	            .url(url)
     	            .post(RequestBody.create(MEDIA_TYPE_TEXT, body))
     	            .build();
@@ -222,7 +223,6 @@ public class CTsdbAdapter implements DBAdapter {
 			long startTime1=System.nanoTime();
 			response = client.newCall(request).execute();
 			int code = response.code();
-			System.out.println(response.body().string());
 			response.close();
 			long endTime1=System.nanoTime();
 			costTime=endTime1-startTime1;
