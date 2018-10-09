@@ -25,6 +25,7 @@ import cn.edu.ruc.base.TsPackage;
 import cn.edu.ruc.base.TsParamConfig;
 import cn.edu.ruc.base.TsQuery;
 import cn.edu.ruc.base.TsWrite;
+import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -111,6 +112,7 @@ public class CTsdbAdapter implements DBAdapter {
 	public Status execWrite(Object write) {
 		writeUrl = URL + "/" + metric + "/doc/_bulk";
 	    Request request = new Request.Builder()
+	    		.header("Authorization", Credentials.basic(user, pwd))
 	            .url(writeUrl)
 	            .post(RequestBody.create(MEDIA_TYPE_TEXT, write.toString()))
 	            .build();
@@ -200,6 +202,7 @@ public class CTsdbAdapter implements DBAdapter {
 	@Override
 	public Status execQuery(Object query) {
 	    Request request = new Request.Builder()
+	    		.header("Authorization", Credentials.basic(user, pwd))
 	            .url(queryUrl)
 	            .post(RequestBody.create(MEDIA_TYPE_TEXT, query.toString()))
 	            .build();
