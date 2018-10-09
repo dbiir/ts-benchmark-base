@@ -67,6 +67,7 @@ public class CTsdbAdapter implements DBAdapter {
 
 	@Override
 	public void initDataSource(TsDataSource ds, TsParamConfig tspc) {
+		Authenticator.setDefault(new MyAuthenticator());
 		URL=String.format(URL,ds.getIp(),ds.getPort());
         queryUrl = URL + "/%s/_search";
         metricUrl = URL + "/_metric/";
