@@ -1,26 +1,11 @@
 package cn.edu.ruc.adapter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import cn.edu.ruc.base.*;
 import com.alibaba.fastjson.JSON;
+import okhttp3.*;
 
-import cn.edu.ruc.base.Status;
-import cn.edu.ruc.base.TsDataSource;
-import cn.edu.ruc.base.TsPackage;
-import cn.edu.ruc.base.TsParamConfig;
-import cn.edu.ruc.base.TsQuery;
-import cn.edu.ruc.base.TsWrite;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class OpentsdbAdapter implements DBAdapter {
 	private  String URL="http://%s:%s";
@@ -163,6 +148,7 @@ public class OpentsdbAdapter implements DBAdapter {
 			long startTime1=System.nanoTime();
 			response = client.newCall(request).execute();
 			int code = response.code();
+			response.body().string();
 			response.close();
 			long endTime1=System.nanoTime();
 			costTime=endTime1-startTime1;
