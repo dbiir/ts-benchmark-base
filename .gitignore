@@ -17,7 +17,6 @@
 # intermediately generated locally
 **/logs/
 
-result/result.json
 #*.jar
 *.gz
 *.tar.gz
