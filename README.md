@@ -1,5 +1,5 @@
-# tsbm 
-ts benchmark 
+# Tsbm 
+timeseries db benchmark 
 
 # Prerequisites
 1. Java >= 1.8
