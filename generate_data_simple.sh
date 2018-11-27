@@ -24,5 +24,5 @@ if [ -n "$JAVA_HOME" ]; then
 else
     JAVA=java
 fi
-exec "$JAVA"   -cp "$CLASSPATH" "$MAIN_CLASS" "7"
+exec "$JAVA"   -cp "$CLASSPATH" "$MAIN_CLASS" "0.0001"
 
