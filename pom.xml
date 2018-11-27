@@ -9,7 +9,14 @@
 
 	<name>tsbm</name>
 	<url>http://maven.apache.org</url>
-
+	<repositories> 
+		<repository>
+			<id>artifactory.external</id>
+			<name>GE external repository</name> 
+			<url>https://artifactory.predix.io/artifactory/PREDIX-EXT</url>
+		</repository>
+ </repositories>
+ 
 	<properties>
 		<compile.version>1.8</compile.version>
 		<targetJavaVersion>1.8</targetJavaVersion>
@@ -112,6 +119,14 @@
 		    <artifactId>http-request</artifactId>
 		    <version>${http.request.version}</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpcore</artifactId>
+		    <version>4.4.10</version>
+		</dependency>
+				
 <!-- 		<dependency>
 		    <groupId>com.datastax.cassandra</groupId>
 		    <artifactId>cassandra-driver-core</artifactId>
@@ -122,6 +137,11 @@
              <artifactId>tbase</artifactId>
               <version>1.1.4</version>
           </dependency> -->
+          <dependency> 
+          	<groupId>com.ge.predix.timeseries</groupId>
+          	 <artifactId>timeseries-client</artifactId> 
+          	 <version>0.0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -129,6 +149,7 @@
 				<directory>src/main/java</directory>
 				<includes>
 					<include>**/*.xml</include>
+					<include>**/*.properties</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>
