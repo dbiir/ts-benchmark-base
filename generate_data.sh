@@ -1,14 +1,12 @@
 #!/bin/sh
-
+mkdir druid_data
 if [ -z "${BENCHMARK_HOME}" ]; then
-  export BENCHMARK_HOME="$(cd "`dirname "$0"`"/..; pwd)"
+  export BENCHMARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 fi
 pwd
 echo $BENCHMARK_HOME
 
-MAIN_CLASS=cn.edu.ruc.cmd.BootStrap
-#MAIN_CLASS=cn.edu.ruc.biz.Core
-#MAIN_CLASS=cn.edu.ruc.Test
+MAIN_CLASS=cn.edu.ruc.utils.GenerateData
 
 CLASSPATH=""
 for f in ${BENCHMARK_HOME}/lib/*.jar; do
@@ -26,8 +24,5 @@ if [ -n "$JAVA_HOME" ]; then
 else
     JAVA=java
 fi
-echo $CLASSPATH
+exec "$JAVA"   -cp "$CLASSPATH" "$MAIN_CLASS" "7"
 
-exec "$JAVA"   -cp "$CLASSPATH" "$MAIN_CLASS" "$@"
-
-exit $?
