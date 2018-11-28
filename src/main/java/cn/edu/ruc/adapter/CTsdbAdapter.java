@@ -1,36 +1,16 @@
 package cn.edu.ruc.adapter;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-
+import cn.edu.ruc.base.*;
+import com.alibaba.fastjson.JSON;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
-
-import cn.edu.ruc.base.Status;
-import cn.edu.ruc.base.TsDataSource;
-import cn.edu.ruc.base.TsPackage;
-import cn.edu.ruc.base.TsParamConfig;
-import cn.edu.ruc.base.TsQuery;
-import cn.edu.ruc.base.TsWrite;
-import okhttp3.Credentials;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class CTsdbAdapter implements DBAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(CTsdbAdapter.class);
@@ -62,8 +42,21 @@ public class CTsdbAdapter implements DBAdapter {
         }
     }
 
-
     public static void main(String[] arg) throws SQLException{
+    	MediaType parse = MediaType.parse("text/plain");
+    	System.out.println(parse.type());
+//    	StringBuffer sc = new StringBuffer();
+//    	for(int i=0;i<100;i++){
+//    		Map<String,Object> map=new HashMap<String, Object>();
+//    		map.put("time",System.currentTimeMillis()-i*7000);
+//    		map.put("sensor_code","s"+i);
+//    		map.put("device_code","d"+i);
+//    		map.put("valueSum", i);
+//    		sc.append(JSON.toJSONString(map));
+//    		sc.append("\n");
+//    	}
+//    	return sc.toString();
+//    	System.out.println(sc.toString());
     }
 
 	@Override
@@ -202,11 +195,17 @@ public class CTsdbAdapter implements DBAdapter {
 
 	@Override
 	public Status execQuery(Object query) {
-	    Request request = new Request.Builder()
-	    		.header("Authorization", Credentials.basic(user, pwd))
-	            .url(queryUrl)
-	            .post(RequestBody.create(MEDIA_TYPE_TEXT, query.toString()))
-	            .build();
+		MEDIA_TYPE_TEXT.charset(null);
+	    Request request=null;
+		try {
+			request = new Request.Builder()
+					.header("Authorization", Credentials.basic(user, pwd))
+			        .url(queryUrl)
+			        .post(RequestBody.create(MEDIA_TYPE_TEXT, query.toString().getBytes("UTF-8")))
+			        .build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return exeOkHttpRequest(request);
 	}
 
@@ -222,6 +221,7 @@ public class CTsdbAdapter implements DBAdapter {
 		try {
 			long startTime1=System.nanoTime();
 			response = client.newCall(request).execute();
+			System.out.println(response.body().string());
 			int code = response.code();
 			response.close();
 			long endTime1=System.nanoTime();
