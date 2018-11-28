@@ -23,7 +23,7 @@ public class GenerateData {
 //        String endDateStr="2018-01-08T00:00:00.000";
 		long currentTime= startTime;
 //		long endTime=DATE_FORMAT.parse(endDateStr).getTime();
-		long endTime=startTime+(long)(INTERNAL*24L*3600L*7000L);
+		long endTime=startTime+(long)(INTERNAL*24L*3600L*1000L);
 		Random r =new Random();
 		StringBuffer sc=new StringBuffer();
 		while(currentTime<endTime){
