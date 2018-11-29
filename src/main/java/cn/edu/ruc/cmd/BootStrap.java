@@ -54,7 +54,7 @@ public class BootStrap {
 		System.out.println(tsds.getDriverClass());
 		CoreBiz biz=new CoreBiz(tpc, tsds);
 		//开始时间 结束时间 类型（读2/写1）sum costTime(s) 客户端数 pps/rps mean 50% 95% max min successRatio
-		String resultFormat="%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%.2f";
+		String resultFormat="%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%.2f\n";
 		String resultStr="";
 		if("write".equals(tpc.getTestMode())) {
 			LOGGER.info("...........write start...........");
@@ -63,7 +63,7 @@ public class BootStrap {
 			long endTime = System.currentTimeMillis();
 			LOGGER.info("...........write end...........");
 			jsonMap.put("result_write", result);
-			resultStr=String.format(resultStr,DATE_FORMAT.format(new Date(startTime)),
+			resultStr=String.format(resultFormat,DATE_FORMAT.format(new Date(startTime)),
 					DATE_FORMAT.format(new Date(endTime)),
 					1,
 					result.getSumPoints(),
@@ -84,7 +84,7 @@ public class BootStrap {
 			long endTime = System.currentTimeMillis();
 			LOGGER.info("...........read end...........");
 			jsonMap.put("result_read", result);
-			resultStr=String.format(resultStr,DATE_FORMAT.format(new Date(startTime)),
+			resultStr=String.format(resultFormat,DATE_FORMAT.format(new Date(startTime)),
 					DATE_FORMAT.format(new Date(endTime)),
 					2,
 					result.getSumRequests(),
@@ -177,8 +177,9 @@ public class BootStrap {
 //		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.json";
 		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.csv";
 		FileWriter fw = new FileWriter(jsonPath, true);
-		PrintWriter out = new PrintWriter(fw);
+//		PrintWriter out = new PrintWriter(fw);
 		out.write(json+",");
+		out.write(json);
 		out.println();
 		fw.close();
 		out.close();
