@@ -75,7 +75,7 @@ public class BootStrap {
 					result.getNinty5Timeout(),
 					result.getMaxTimeout(),
 					result.getMinTimeout(),
-					1);
+					1.0);
 		}
 		if("read".equals(tpc.getTestMode())) {
 			LOGGER.info("...........read start...........");
