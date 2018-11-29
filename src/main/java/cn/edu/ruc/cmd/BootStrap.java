@@ -35,7 +35,7 @@ import cn.edu.ruc.biz.CoreBiz;
  *
  */
 public class BootStrap {
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHH:mm:ss");
+	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 
 	//	private static final String SYS_CONFIG_PATH="config_path";
 	private static final String DB_CONFIG_PATH="db_config_path";
