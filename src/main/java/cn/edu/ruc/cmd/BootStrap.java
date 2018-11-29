@@ -99,6 +99,7 @@ public class BootStrap {
 					result.getSuccessRatio());
 		}
 		String json = JSON.toJSONString(jsonMap);
+		System.out.println(resultStr);
 		writeResult(resultStr);
 //		writeResult(json);
 	}
