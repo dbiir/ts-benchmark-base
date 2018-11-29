@@ -178,8 +178,8 @@ public class BootStrap {
 //		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.json";
 		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.csv";
 		FileWriter fw = new FileWriter(jsonPath, true);
-//		PrintWriter out = new PrintWriter(fw);
-		out.write(json+",");
+		PrintWriter out = new PrintWriter(fw);
+//		out.write(json+",");
 		out.write(json);
 		out.println();
 		fw.close();
