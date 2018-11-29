@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -33,7 +35,9 @@ import cn.edu.ruc.biz.CoreBiz;
  *
  */
 public class BootStrap {
-//	private static final String SYS_CONFIG_PATH="config_path";
+	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHH:mm:ss");
+
+	//	private static final String SYS_CONFIG_PATH="config_path";
 	private static final String DB_CONFIG_PATH="db_config_path";
 //	private static final String SYS_BINDING_PATH="bindings_path";
 	private static Properties SYSTEM_PARAM=new Properties();
@@ -49,21 +53,54 @@ public class BootStrap {
 		jsonMap.put("data_source", tsds);
 		System.out.println(tsds.getDriverClass());
 		CoreBiz biz=new CoreBiz(tpc, tsds);
+		//开始时间 结束时间 类型（读2/写1）sum costTime(s) 客户端数 pps/rps mean 50% 95% max min successRatio
+		String resultFormat="%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%.2f";
+		String resultStr="";
 		if("write".equals(tpc.getTestMode())) {
 			LOGGER.info("...........write start...........");
+			long startTime = System.currentTimeMillis();
 			TsWriteResult result = biz.insertPoints();
+			long endTime = System.currentTimeMillis();
 			LOGGER.info("...........write end...........");
 			jsonMap.put("result_write", result);
-
+			resultStr=String.format(resultStr,DATE_FORMAT.format(new Date(startTime)),
+					DATE_FORMAT.format(new Date(endTime)),
+					1,
+					result.getSumPoints(),
+					(endTime-startTime)/1000,
+					tpc.getWriteClients(),
+					result.getPps(),
+					result.getMeanTimeout(),
+					result.getFiftyTimeout(),
+					result.getNinty5Timeout(),
+					result.getMaxTimeout(),
+					result.getMinTimeout(),
+					1);
 		}
 		if("read".equals(tpc.getTestMode())) {
 			LOGGER.info("...........read start...........");
+			long startTime = System.currentTimeMillis();
 			TsReadResult result = biz.queryTest();
+			long endTime = System.currentTimeMillis();
 			LOGGER.info("...........read end...........");
 			jsonMap.put("result_read", result);
+			resultStr=String.format(resultStr,DATE_FORMAT.format(new Date(startTime)),
+					DATE_FORMAT.format(new Date(endTime)),
+					2,
+					result.getSumRequests(),
+					(endTime-startTime)/1000,
+					tpc.getWriteClients(),
+					result.getTps(),
+					result.getMeanTimeout(),
+					result.getFiftyTimeout(),
+					result.getNinty5Timeout(),
+					result.getMaxTimeout(),
+					result.getMinTimeout(),
+					result.getSuccessRatio());
 		}
 		String json = JSON.toJSONString(jsonMap);
-		writeResult(json);
+		writeResult(resultStr);
+//		writeResult(json);
 	}
 	private static void initParam(String[] args) {
 		Options options=new Options();
@@ -137,7 +174,8 @@ public class BootStrap {
 	private static void writeResult(String json) throws Exception {
 		String dbConfigPath = System.getProperty(DB_CONFIG_PATH);
 		int index=dbConfigPath.lastIndexOf("/conf");
-		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.json";
+//		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.json";
+		String jsonPath = dbConfigPath.substring(0, index)+"/result/result.csv";
 		FileWriter fw = new FileWriter(jsonPath, true);
 		PrintWriter out = new PrintWriter(fw);
 		out.write(json+",");
