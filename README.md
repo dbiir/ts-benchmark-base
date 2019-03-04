@@ -1,4 +1,5 @@
 # Tsbm 
+if you want to test new database ,you can see [this md](https://github.com/dbiir/ts-benchmark/blob/master/doc/development.md)
 timeseries db benchmark 
 
 # Prerequisites
