@@ -1,5 +1,6 @@
 # ts benchmark
-this is new version of ts-benchmark,the old version please see [this](https://github.com/foruever/tsbm)
+this is new version of ts-benchmark,the old version please see [this](https://github.com/foruever/tsbm)   
+ts benchmark is tool used to test timeseries database
 # Prerequisites
 1. Java >= 1.8
 2. Maven >= 3.0 
