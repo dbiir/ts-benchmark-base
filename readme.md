@@ -17,7 +17,7 @@ this is new version of ts-benchmark,the old version please see [this](https://gi
         </dependency>
 ```
 4. implements interface `cn.edu.ruc.adapter.BaseAdapter`
-5. use `TSBM.startPerformTest(dataPath, className, ip, port, userName, passwd`  
+5. use `TSBM.startPerformTest(dataPath, className, ip, port, userName, passwd)`  
 example:   
 ```
         String dataPath = "/Users/fasape/project/tsdb-test/";
@@ -29,7 +29,7 @@ example:
         TSBM.startPerformTest(dataPath, className, ip, port, userName, passwd);
 ```
 
-#exmaple
+# exmaple
 if you want to see detail examples please see [this project](https://github.com/foruever/tsdb-test) 
 
 
