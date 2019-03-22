@@ -2,6 +2,7 @@ package cn.edu.ruc.start;
 
 import cn.edu.ruc.adapter.BaseAdapter;
 import cn.edu.ruc.utils.FileUtils;
+import cn.edu.ruc.utils.ValueUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -123,7 +124,8 @@ public class TSBM {
     private static void generateDiskData(String basePath, int maxFarm, int maxRows) {
         // 1 生成load数据 7天 2个风场 共100个设备，每个设备50个传感器的数据
         long importStart = 1514736000000L;// 2018-01-01 00:00:00
-        long importEnd = importStart + 7 * 24 * 3600 * 1000;
+//        long importEnd = importStart + 7 * 24 * 3600 * 1000;
+        long importEnd = importStart + 3600 * 1000;
         for (long start = importStart; start <= importEnd; start += 70000) {
             String path = basePath + "/load/load.data";
             long end = importEnd < start + 70000 ? importEnd : start + 70000;
@@ -172,7 +174,8 @@ public class TSBM {
                 dBuffer.append("d" + rowIndex);
                 for (int sn = 1; sn <= sumSensor; sn++) {
                     dBuffer.append(SEPARATOR);
-                    dBuffer.append(String.format("%.5f", RANDOM.nextDouble() * sn));
+//                    dBuffer.append(String.format("%.5f", RANDOM.nextDouble() * sn));
+                    dBuffer.append(String.format("%.5f", ValueUtils.getValueByField((int)farmId,sn,start)));
                 }
                 dBuffer.append(LINE_SEPARATOR);
                 dataBuffer.append(dBuffer.toString());
