@@ -124,8 +124,8 @@ public class TSBM {
     private static void generateDiskData(String basePath, int maxFarm, int maxRows) {
         // 1 生成load数据 7天 2个风场 共100个设备，每个设备50个传感器的数据
         long importStart = 1514736000000L;// 2018-01-01 00:00:00
-//        long importEnd = importStart + 7 * 24 * 3600 * 1000;
-        long importEnd = importStart + 3600 * 1000;
+        long importEnd = importStart + 7 * 24 * 3600 * 1000;
+//        long importEnd = importStart + 3600 * 1000;
         for (long start = importStart; start <= importEnd; start += 70000) {
             String path = basePath + "/load/load.data";
             long end = importEnd < start + 70000 ? importEnd : start + 70000;
@@ -394,7 +394,7 @@ public class TSBM {
             long start = time + (cBatch - 1) * slipUnit;//1 day
             long incre = 3600 * 1000 * 24;
             long end = time + incre + (cBatch - 1) * slipUnit;
-            double value = 0.8;//阈值 TODO
+            double value = 3.0;//阈值 TODO
             long timeout = adapter.query2(start, end, value);
             sumTimeout2 += timeout;
             System.out.println("query 2." + cBatch + " finished " + timeout);
