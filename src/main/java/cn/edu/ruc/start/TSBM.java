@@ -368,11 +368,15 @@ public class TSBM {
         resultBuffer.append("##query  result");
         resultBuffer.append(LINE_SEPARATOR);
         int batch = 10;
-        int sleepTime = 500;
+
+
         // 五类查询，每类10个批次
         // TODO
         long time = 1514736000000l;//2018-01-01 00:00:00
 //        long time = 1514822400000l;//test
+        //首先查询一次刷新数据
+        adapter.query1(time, time+100*3600*24);
+        sleep(SLEEP_TIME);
         // 每一批次比前一批次时间维度平移1hour
         long slipUnit = 3600 * 1000;
         long sumTimeout1 = 0;
