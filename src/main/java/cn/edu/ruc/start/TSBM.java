@@ -6,6 +6,9 @@ import cn.edu.ruc.utils.ValueUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.*;
 
@@ -233,6 +236,7 @@ public class TSBM {
      * append test
      */
     private static String appendPerform(String basePath, BaseAdapter adapter, int maxFarm, int maxRows) {
+        int sleepTime = 7000;
         StringBuffer appendResultBuffer = new StringBuffer();
         appendResultBuffer.append("##append  result");
         appendResultBuffer.append(LINE_SEPARATOR);
@@ -245,15 +249,25 @@ public class TSBM {
             ExecutorService pool = Executors.newFixedThreadPool(farm);
             CompletionService<Long> cs = new ExecutorCompletionService<Long>(pool);
             long sumPps = 0L;
+            //每个风场，每个7s发送一次数据
+            Map<Integer,Integer> thinkTimeMap=new HashMap<Integer,Integer>();
+            for (int cFarm = 1; cFarm <= farm; cFarm++) {
+                int thinkTime = RANDOM.nextInt(sleepTime);
+                thinkTimeMap.put(cFarm,thinkTime);
+            }
             for (int batch = 1; batch <= batchMax; batch++) {
+                long startTime = System.currentTimeMillis();
                 for (int cFarm = 1; cFarm <= farm; cFarm++) {
                     String path = basePath + "/farm/" + farm + "/" + batch + "/" + cFarm;
-                    executeAppend(adapter, cs, path);
+                    executeAppend(adapter, cs, path,thinkTimeMap.get(cFarm));
                 }
                 long pps = calcThroughtPut(row, farm, cs);
                 sumPps += pps;
                 System.out.println("append 1." + farm + "." + batch + " finished " + pps);
-                sleep(SLEEP_TIME);
+                long endTime = System.currentTimeMillis();
+                long costTime=endTime-startTime;
+                // 每七秒执行一次
+                sleep(sleepTime-costTime>0?sleepTime-costTime:1);
             }
             appendResultBuffer.append("farm");
             appendResultBuffer.append("\t");
@@ -273,15 +287,25 @@ public class TSBM {
             ExecutorService pool = Executors.newFixedThreadPool(farm);
             CompletionService<Long> cs = new ExecutorCompletionService<Long>(pool);
             long sumPps = 0L;
+            //每个风场，每个7s发送一次数据
+            Map<Integer,Integer> thinkTimeMap=new HashMap<Integer,Integer>();
+            for (int cFarm = 1; cFarm <= farm; cFarm++) {
+                int thinkTime = RANDOM.nextInt(sleepTime);
+                thinkTimeMap.put(cFarm,thinkTime);
+            }
             for (int batch = 1; batch <= batchMax; batch++) {
+                long startTime = System.currentTimeMillis();
                 for (int cFarm = 1; cFarm <= farm; cFarm++) {
                     String path = basePath + "/device/" + row + "/" + batch + "/" + cFarm;
-                    executeAppend(adapter, cs, path);
+                    executeAppend(adapter, cs, path,thinkTimeMap.get(cFarm));
                 }
                 long pps = calcThroughtPut(row, farm, cs);
                 sumPps += pps;
                 System.out.println("append 2." + row + "." + batch + " finished " + pps);
-                sleep(SLEEP_TIME);
+                long endTime = System.currentTimeMillis();
+                long costTime=endTime-startTime;
+                // 每七秒执行一次
+                sleep(sleepTime-costTime>0?sleepTime-costTime:1);
             }
             appendResultBuffer.append("device");
             appendResultBuffer.append("\t");
@@ -326,6 +350,16 @@ public class TSBM {
             @Override
             public Long call() throws Exception {
                 String data = FileUtils.read(path);
+                return adapter.insertData(data);
+            }
+        });
+    }
+    private static void executeAppend(BaseAdapter adapter, CompletionService<Long> cs, String path,final int sleepTime) {
+        cs.submit(new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                String data = FileUtils.read(path);
+                Thread.currentThread().sleep(sleepTime);
                 return adapter.insertData(data);
             }
         });
@@ -383,7 +417,7 @@ public class TSBM {
         for (int cBatch = 1; cBatch <= batch; cBatch++) {
             long start = time + (cBatch - 1) * slipUnit;//1 hour
             long incre = 3600 * 1000;
-            long end = time + incre + cBatch * (cBatch - 1) * slipUnit;
+            long end = time + incre +  (cBatch - 1) * slipUnit;
             long timeout = adapter.query1(start, end);
             sumTimeout1 += timeout;
             System.out.println("query 1." + cBatch + " finished " + timeout);
@@ -455,7 +489,7 @@ public class TSBM {
 
     private static void sleep(long sleepTime) {
         try {
-            Thread.sleep(sleepTime);
+            Thread.currentThread().sleep(sleepTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
