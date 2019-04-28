@@ -136,7 +136,7 @@ public class TSBM {
             int sumFarm=50;// 历史数据风场数
             for(int farmId=1;farmId<=50;farmId++){
                 FileUtils.writeLine(path, generateData(start, end, farmId, 50));
-                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
+//                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
             }
 
         }
