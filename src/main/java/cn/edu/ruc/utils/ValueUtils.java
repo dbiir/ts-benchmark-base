@@ -13,6 +13,10 @@ public class ValueUtils {
     private static long IMPORT_START_TIME=1514736000000L;
     private static final Random RANDOM = new Random();
     public static double getValueByField(int fNum,int sNum,long time){
+        sNum=sNum%50;// 增加鲁棒性
+        if(sNum==0){
+            sNum=50;
+        }
         time=(time-IMPORT_START_TIME)/7000;
         double cFactor = (RANDOM.nextDouble()/100 +0.99)*(1+(fNum-1)/100);
         return getValueBySensor(sNum,time)*cFactor;

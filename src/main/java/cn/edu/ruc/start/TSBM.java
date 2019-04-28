@@ -22,6 +22,7 @@ public class TSBM {
     private static final long SLEEP_TIME = 200L;
     private static final int MAX_FARM = 64;
     private static final int MAX_ROWS = 300;
+    private static final int MAX_SENSOR = 150;
 
     public static void main(String[] args) throws Exception {
     }
@@ -132,8 +133,12 @@ public class TSBM {
         for (long start = importStart; start <= importEnd; start += 70000) {
             String path = basePath + "/load/load.data";
             long end = importEnd < start + 70000 ? importEnd : start + 70000;
-            FileUtils.writeLine(path, generateData(start, end, 1, 50));
-            FileUtils.writeLine(path, generateData(start, end, 2, 50));
+            int sumFarm=50;// 历史数据风场数
+            for(int farmId=1;farmId<=50;farmId++){
+                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
+                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
+            }
+
         }
         // 2 生成 1/2/4/8/16/32/64 farm数据 每个farm50个device，每个10批次，一个批次一个文件
         int batchSum = 5;
@@ -165,7 +170,7 @@ public class TSBM {
 
     private static String generateData(long start, long end, long farmId, long rows) {
         int step = 7000;
-        int sumSensor = 50;
+        int sumSensor = MAX_SENSOR;
         StringBuffer dataBuffer = new StringBuffer();
         for (; start < end; start += step) {
             for (int rowIndex = 1; rowIndex <= rows; rowIndex++) {
