@@ -332,7 +332,7 @@ public class TSBM {
      * @param cs   任务
      */
     private static long calcThroughtPut(int row, int farm, CompletionService<Long> cs) {
-        long points = farm * row * 50;//50个设备，50个传感器
+        long points = farm * row * MAX_SENSOR;//50个设备，50个传感器
         double avgTime = calAvgTimeout(farm, cs);
         long pps = 0L;
         if (avgTime == 0) {
