@@ -243,6 +243,7 @@ public class TSBM {
     private static String appendPerform(String basePath, BaseAdapter adapter, int maxFarm, int maxRows) {
         int sleepTime = 7000;
         StringBuffer appendResultBuffer = new StringBuffer();
+        System.out.println(">>>>>>>>>>append-1 start " + System.currentTimeMillis() + ">>>>>>>>>>");
         appendResultBuffer.append("##append  result");
         appendResultBuffer.append(LINE_SEPARATOR);
         // farm++ test
@@ -282,7 +283,8 @@ public class TSBM {
             appendResultBuffer.append(LINE_SEPARATOR);
             pool.shutdown();
         }
-
+        System.out.println(">>>>>>>>>>append-1 end " + System.currentTimeMillis() + ">>>>>>>>>>");
+        System.out.println(">>>>>>>>>>append-2 start " + System.currentTimeMillis() + ">>>>>>>>>>");
         // row++ test
         appendResultBuffer.append("###append device++ result");
         appendResultBuffer.append(LINE_SEPARATOR);
@@ -320,6 +322,7 @@ public class TSBM {
             appendResultBuffer.append(LINE_SEPARATOR);
             pool.shutdown();
         }
+        System.out.println(">>>>>>>>>>append-2 end " + System.currentTimeMillis() + ">>>>>>>>>>");
         return appendResultBuffer.toString();
     }
 
@@ -416,6 +419,7 @@ public class TSBM {
         //首先查询一次刷新数据
         adapter.query1(time, time+100*3600*24);
         sleep(SLEEP_TIME);
+        System.out.println(">>>>>>>>>>query-1 end " + System.currentTimeMillis() + ">>>>>>>>>>");
         // 每一批次比前一批次时间维度平移1hour
         long slipUnit = 3600 * 1000;
         long sumTimeout1 = 0;
@@ -432,6 +436,8 @@ public class TSBM {
         resultBuffer.append("\t");
         resultBuffer.append(sumTimeout1 / batch);
         resultBuffer.append(LINE_SEPARATOR);
+        System.out.println(">>>>>>>>>>query-2 end " + System.currentTimeMillis() + ">>>>>>>>>>");
+
         long sumTimeout2 = 0;
         for (int cBatch = 1; cBatch <= batch; cBatch++) {
             long start = time + (cBatch - 1) * slipUnit;//1 day
@@ -448,6 +454,8 @@ public class TSBM {
         resultBuffer.append(sumTimeout2 / batch);
         resultBuffer.append(LINE_SEPARATOR);
         long sumTimeout3 = 0;
+        System.out.println(">>>>>>>>>>query-3 end " + System.currentTimeMillis() + ">>>>>>>>>>");
+
         for (int cBatch = 1; cBatch <= batch; cBatch++) {
             long start = time + (cBatch - 1) * slipUnit;// 1 day
             long incre = 3600 * 1000 * 24;
@@ -462,6 +470,8 @@ public class TSBM {
         resultBuffer.append(sumTimeout3 / batch);
         resultBuffer.append(LINE_SEPARATOR);
         long sumTimeout4 = 0;
+        System.out.println(">>>>>>>>>>query-4 end " + System.currentTimeMillis() + ">>>>>>>>>>");
+
         for (int cBatch = 1; cBatch <= batch; cBatch++) {
             long start = time + (cBatch - 1) * slipUnit;// 15 min
             long incre = 1000 * 15 * 50;
@@ -475,6 +485,8 @@ public class TSBM {
         resultBuffer.append("\t");
         resultBuffer.append(sumTimeout4 / batch);
         resultBuffer.append(LINE_SEPARATOR);
+        System.out.println(">>>>>>>>>>query-5 end " + System.currentTimeMillis() + ">>>>>>>>>>");
+
         long sumTimeout5 = 0;
         for (int cBatch = 1; cBatch <= batch; cBatch++) {
             long start = time + (cBatch - 1) * slipUnit;//15 min
