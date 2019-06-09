@@ -20,10 +20,11 @@ public class TSBM {
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final Random RANDOM = new Random();
     private static final long SLEEP_TIME = 200L;
-    private static final int MAX_FARM = 64;
+    private static final int MAX_FARM = 512;
     private static final int MAX_ROWS = 300;
     private static final int MAX_SENSOR = 50;
     private static final int SUM_FARM = 2;
+    private static final long IMPORT_START = 1514736000000L;
 
     public static void main(String[] args) throws Exception {
     }
@@ -75,7 +76,13 @@ public class TSBM {
             System.out.println(">>>>>>>>>>generate data begin " + System.currentTimeMillis() + ">>>>>>>>>>");
             generateDiskData(dataPath, maxFarm, maxRows);
             System.out.println("<<<<<<<<<<generate data finished " + System.currentTimeMillis() + "<<<<<<<");
+        }else{
+            System.out.println(">>>>>>>>>>generate insert data begin " + System.currentTimeMillis() + ">>>>>>>>>>");
+            generateInsertData(dataPath, maxFarm, maxRows);
+            System.out.println("<<<<<<<<<<generate insert data finished " + System.currentTimeMillis() + "<<<<<<<");
         }
+
+
 
         // 2 导入
         if (loadParam) {
@@ -128,8 +135,8 @@ public class TSBM {
      */
     private static void generateDiskData(String basePath, int maxFarm, int maxRows) {
         // 1 生成load数据 7天 2个风场 共100个设备，每个设备50个传感器的数据
-        long importStart = 1514736000000L;// 2018-01-01 00:00:00
-        long importEnd = importStart + 7 * 24 * 3600 * 1000;
+        long importStart = IMPORT_START;// 2018-01-01 00:00:00
+        long importEnd = IMPORT_START + 7 * 24 * 3600 * 1000;
 //        long importEnd = importStart + 24* 3600 * 1000;
         for (long start = importStart; start <= importEnd; start += 70000) {
             String path = basePath + "/load/load.data";
@@ -141,6 +148,12 @@ public class TSBM {
             }
 
         }
+        generateInsertData(basePath, maxFarm, maxRows);
+    }
+
+    private static void generateInsertData(String basePath, int maxFarm, int maxRows) {
+
+        long importEnd = IMPORT_START + 7 * 24 * 3600 * 1000;
         // 2 生成 1/2/4/8/16/32/64 farm数据 每个farm50个device，每个10批次，一个批次一个文件
         int batchSum = 5;
         long insertStart = importEnd;
