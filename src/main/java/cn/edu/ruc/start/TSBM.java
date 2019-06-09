@@ -22,7 +22,7 @@ public class TSBM {
     private static final long SLEEP_TIME = 200L;
     private static final int MAX_FARM = 512;
     private static final int MAX_ROWS = 300;
-    private static final int MAX_SENSOR = 50;
+    private static final int MAX_SENSOR = 150;
     private static final int SUM_FARM = 2;
     private static final long IMPORT_START = 1514736000000L;
 
