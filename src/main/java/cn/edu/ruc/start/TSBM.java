@@ -77,6 +77,7 @@ public class TSBM {
             generateDiskData(dataPath, maxFarm, maxRows);
             System.out.println("<<<<<<<<<<generate data finished " + System.currentTimeMillis() + "<<<<<<<");
         }else{
+
             System.out.println(">>>>>>>>>>generate insert data begin " + System.currentTimeMillis() + ">>>>>>>>>>");
             generateInsertData(dataPath, maxFarm, maxRows);
             System.out.println("<<<<<<<<<<generate insert data finished " + System.currentTimeMillis() + "<<<<<<<");
