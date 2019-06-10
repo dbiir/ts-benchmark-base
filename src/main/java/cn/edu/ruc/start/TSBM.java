@@ -79,7 +79,7 @@ public class TSBM {
         }else{
 
             System.out.println(">>>>>>>>>>generate insert data begin " + System.currentTimeMillis() + ">>>>>>>>>>");
-            generateInsertData(dataPath, maxFarm, maxRows);
+//            generateInsertData(dataPath, maxFarm, maxRows);
             System.out.println("<<<<<<<<<<generate insert data finished " + System.currentTimeMillis() + "<<<<<<<");
         }
 
